@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habiba Ziedan — AI &amp; Machine Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAF8F3;
+    --bg-elevated:#FFFFFF;
+    --ink:#161A22;
+    --ink-soft:#565F72;
+    --ink-faint:#8990A0;
+    --accent:#2B4FE0;
+    --accent-ink:#FFFFFF;
+    --route:#C9481B;
+    --line:#E2DED2;
+    --card-border:#E7E2D4;
+    --shadow: 0 1px 0 rgba(22,26,34,0.04);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg:#10131A;
+      --bg-elevated:#161B25;
+      --ink:#EDEAE1;
+      --ink-soft:#9BA2B4;
+      --ink-faint:#6C7284;
+      --accent:#6E8CFF;
+      --accent-ink:#0C0E13;
+      --route:#E8763F;
+      --line:#262B38;
+      --card-border:#262B38;
+      --shadow: 0 1px 0 rgba(0,0,0,0.2);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10131A;
+    --bg-elevated:#161B25;
+    --ink:#EDEAE1;
+    --ink-soft:#9BA2B4;
+    --ink-faint:#6C7284;
+    --accent:#6E8CFF;
+    --accent-ink:#0C0E13;
+    --route:#E8763F;
+    --line:#262B38;
+    --card-border:#262B38;
+    --shadow: 0 1px 0 rgba(0,0,0,0.2);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', system-ui, -apple-system, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    transition:background .3s ease, color .3s ease;
+  }
+  ::selection{ background:var(--accent); color:var(--accent-ink); }
+
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:500;
+    margin:0;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'JetBrains Mono', ui-monospace, monospace;
+  }
+  a{ color:inherit; }
+  img{max-width:100%; display:block;}
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- Top nav ---------- */
+  header.topnav{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav-inner{
+    max-width:920px; margin:0 auto; padding:16px 28px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:'Fraunces', serif;
+    font-size:1.05rem;
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+  .brand span{ color:var(--route); }
+  nav.links{ display:flex; gap:28px; align-items:center; }
+  nav.links a{
+    text-decoration:none;
+    font-size:0.92rem;
+    color:var(--ink-soft);
+    transition:color .15s ease;
+  }
+  nav.links a:hover{ color:var(--ink); }
+  nav.links a.active{ color:var(--accent); }
+  .theme-toggle{
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink-soft);
+    width:32px; height:32px;
+    border-radius:7px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.85rem;
+  }
+  .theme-toggle:hover{ color:var(--ink); border-color:var(--ink-faint); }
+  .menu-btn{ display:none; background:none; border:none; color:var(--ink); font-size:1.4rem; cursor:pointer; }
+
+  @media (max-width: 700px){
+    nav.links{
+      position:fixed; inset:57px 0 0 0; background:var(--bg);
+      flex-direction:column; align-items:flex-start; padding:24px 28px;
+      gap:20px; transform:translateY(-8px); opacity:0; pointer-events:none;
+      transition:opacity .2s ease, transform .2s ease;
+    }
+    nav.links.open{ opacity:1; pointer-events:auto; transform:translateY(0); }
+    nav.links a{ font-size:1.1rem; }
+    .menu-btn{ display:block; }
+  }
+
+  /* ---------- Route line (the "guide" motif) ---------- */
+  .route{
+    position:absolute; left:0; top:0; bottom:0; width:56px;
+    display:flex; justify-content:center;
+  }
+  .route::before{
+    content:"";
+    position:absolute; top:0; bottom:0; width:1px;
+    background:var(--line);
+  }
+  .waypoint{
+    position:relative; width:9px; height:9px; border-radius:50%;
+    background:var(--bg); border:1.5px solid var(--ink-faint);
+    margin-top:6px;
+  }
+  section[id] .waypoint{ position:sticky; top:88px; }
+
+  .section-shell{
+    position:relative;
+    padding-left:64px;
+  }
+  @media (max-width: 700px){
+    .section-shell{ padding-left:0; }
+    .route{ display:none; }
+  }
+
+  section{ padding:88px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+
+  .kicker{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.04em;
+    color:var(--route);
+    margin-bottom:14px;
+  }
+
+  /* ---------- Hero ---------- */
+  #home{ padding-top:64px; }
+  .hero-name{
+    font-size:clamp(2.4rem, 6vw, 3.6rem);
+    line-height:1.05;
+  }
+  .hero-role{
+    margin-top:14px;
+    font-size:clamp(1.1rem, 2.4vw, 1.35rem);
+    color:var(--ink-soft);
+    max-width:34ch;
+  }
+  .hero-positioning{
+    margin-top:22px;
+    max-width:52ch;
+    font-size:1.02rem;
+    color:var(--ink);
+  }
+  .hero-cta{ margin-top:34px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:11px 20px; border-radius:8px;
+    font-size:0.92rem; font-weight:500;
+    text-decoration:none; cursor:pointer; border:1px solid transparent;
+    transition:transform .12s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn:active{ transform:scale(0.98); }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); }
+  .btn-primary:hover{ background:color-mix(in srgb, var(--accent) 85%, black); }
+  .btn-ghost{ border-color:var(--line); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--ink-faint); }
+
+  .field-tags{ margin-top:44px; display:flex; flex-wrap:wrap; gap:8px; }
+  .field-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    padding:5px 10px;
+    border:1px solid var(--line);
+    border-radius:5px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- Generic section heading ---------- */
+  .sec-head{ margin-bottom:38px; }
+  .sec-head h2{ font-size:1.9rem; }
+  .sec-head p.lede{ color:var(--ink-soft); margin-top:10px; max-width:56ch; }
+
+  /* ---------- About ---------- */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:44px; }
+  @media (max-width:700px){ .about-grid{ grid-template-columns:1fr; } }
+  .about-body p{ margin:0 0 14px; color:var(--ink); }
+  .edu-card{
+    border:1px solid var(--card-border);
+    background:var(--bg-elevated);
+    border-radius:10px;
+    padding:20px 22px;
+  }
+  .edu-card + .edu-card{ margin-top:14px; }
+  .edu-degree{ font-weight:600; font-size:0.98rem; }
+  .edu-meta{ color:var(--ink-soft); font-size:0.87rem; margin-top:4px; }
+
+  /* ---------- Skills ---------- */
+  .skills-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  @media (max-width:700px){ .skills-grid{ grid-template-columns:1fr; } }
+  .skill-group h3{
+    font-family:'Inter', sans-serif; font-weight:600; font-size:0.95rem;
+    color:var(--ink); margin-bottom:12px;
+  }
+  .skill-list{ display:flex; flex-wrap:wrap; gap:8px; }
+  .skill-pill{
+    font-size:0.83rem;
+    padding:6px 12px;
+    border-radius:20px;
+    border:1px solid var(--card-border);
+    color:var(--ink-soft);
+  }
+
+  /* ---------- Experience ---------- */
+  .xp-item{ padding:22px 0; border-bottom:1px solid var(--line); }
+  .xp-item:last-child{ border-bottom:none; padding-bottom:0; }
+  .xp-item:first-child{ padding-top:0; }
+  .xp-top{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:baseline; }
+  .xp-role{ font-weight:600; font-size:1.02rem; }
+  .xp-org{ color:var(--ink-soft); font-size:0.92rem; }
+  .xp-dates{ font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:var(--ink-faint); white-space:nowrap; }
+  .xp-desc{ margin-top:8px; color:var(--ink-soft); font-size:0.94rem; max-width:60ch; }
+
+  /* ---------- Projects ---------- */
+  .proj-card{
+    border:1px solid var(--card-border);
+    background:var(--bg-elevated);
+    border-radius:12px;
+    padding:26px 28px;
+    box-shadow:var(--shadow);
+  }
+  .proj-card + .proj-card{ margin-top:18px; }
+  .proj-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:16px; flex-wrap:wrap; }
+  .proj-name{ font-size:1.18rem; font-weight:500; }
+  .proj-tag{
+    font-family:'JetBrains Mono', monospace; font-size:0.68rem;
+    color:var(--route); border:1px solid var(--route);
+    padding:3px 8px; border-radius:20px; white-space:nowrap;
+  }
+  .proj-desc{ margin-top:12px; color:var(--ink-soft); font-size:0.95rem; max-width:64ch; }
+  .proj-list{ margin:14px 0 0; padding-left:18px; max-width:64ch; }
+  .proj-list li{ color:var(--ink-soft); font-size:0.92rem; margin-bottom:7px; }
+  .proj-list li::marker{ color:var(--route); }
+  .proj-role{ font-size:0.82rem; color:var(--ink-faint); margin-top:4px; }
+  .proj-stack{ margin-top:16px; display:flex; flex-wrap:wrap; gap:7px; }
+  .stack-chip{
+    font-size:0.76rem; font-family:'JetBrains Mono', monospace;
+    color:var(--ink-soft); background:transparent;
+    border:1px solid var(--line); padding:4px 9px; border-radius:5px;
+  }
+  .proj-links{ margin-top:18px; display:flex; gap:16px; }
+  .proj-links a{
+    font-size:0.86rem; text-decoration:none; color:var(--accent);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .proj-links a:hover{ text-decoration:underline; }
+
+  /* ---------- Contact ---------- */
+  .contact-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  @media (max-width:640px){ .contact-grid{ grid-template-columns:1fr; } }
+  .contact-card{
+    border:1px solid var(--card-border);
+    border-radius:10px;
+    padding:18px 20px;
+    text-decoration:none;
+    color:var(--ink);
+    display:flex; flex-direction:column; gap:4px;
+    transition:border-color .15s ease;
+  }
+  .contact-card:hover{ border-color:var(--accent); }
+  .contact-label{ font-size:0.72rem; font-family:'JetBrains Mono', monospace; color:var(--ink-faint); }
+  .contact-value{ font-size:0.98rem; font-weight:500; word-break:break-word; }
+
+  footer{
+    padding:40px 0 60px;
+    color:var(--ink-faint);
+    font-size:0.82rem;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+
+  .placeholder-note{
+    display:inline-block;
+    margin-top:10px;
+    font-size:0.78rem;
+    color:var(--ink-faint);
+    font-style:italic;
+  }
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">Habiba<span>·</span>Ziedan</div>
+    <nav class="links" id="navLinks">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">◐</button>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap" style="position:relative;">
+  <div class="route" aria-hidden="true"></div>
+
+  <!-- HOME -->
+  <section id="home" class="section-shell">
+    <div class="waypoint"></div>
+    <div class="kicker">START — PORTFOLIO</div>
+    <h1 class="hero-name">Habiba Ziedan</h1>
+    <p class="hero-role">Computer Science Graduate — AI, Networking &amp; Cybersecurity</p>
+    <p class="hero-positioning">I build production-style AI systems, most recently leading a full-stack RAG assistant to an A grade, and bring hands-on grounding in network security and defensive cybersecurity from a training program at AIS.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View projects</a>
+      <a href="https://github.com/habibaziedan" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
+    </div>
+    <div class="field-tags">
+      <span class="field-tag">Artificial Intelligence</span>
+      <span class="field-tag">Machine Learning</span>
+      <span class="field-tag">NLP</span>
+      <span class="field-tag">Computer Vision</span>
+      <span class="field-tag">RAG</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section-shell">
+    <div class="waypoint"></div>
+    <div class="kicker">IDENTITY</div>
+    <div class="sec-head">
+      <h2>About</h2>
+      <p class="lede">Who I am, and the path that led to AI &amp; ML.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-body">
+        <p>I'm a Computer Science graduate specializing in Artificial Intelligence, Networking, and Cybersecurity. I led my graduation project — a full-stack, production-style RAG assistant — to an A grade, and I'm comfortable across the stack: Python and NLP on one side, network security and defensive practices on the other.</p>
+        <p>I picked up hands-on security experience through a training program at AIS (Advanced Integrated Systems), and earlier training in machine learning and CCNA-aligned networking. I like building systems that are actually grounded in real data and hold up under real use, not just demo-ready prototypes.</p>
+      </div>
+      <div>
+        <div class="edu-card">
+          <div class="edu-degree">B.Sc. Computer Science</div>
+          <div class="edu-meta">Modern Academy, Cairo · 2026 · GPA 3.1</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-degree">Relevant Coursework</div>
+          <div class="edu-meta">Data Structures, DBMS, Software Engineering, Network Security, NLP, Digital Image Processing</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section-shell">
+    <div class="waypoint"></div>
+    <div class="kicker">EVIDENCE — CAPABILITIES</div>
+    <div class="sec-head">
+      <h2>Skills</h2>
+      <p class="lede">Grouped by area, with AI/ML given top billing.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <h3>AI / ML</h3>
+        <div class="skill-list">
+          <span class="skill-pill">RAG Pipelines</span>
+          <span class="skill-pill">LLMs</span>
+          <span class="skill-pill">NLP</span>
+          <span class="skill-pill">FAISS</span>
+          <span class="skill-pill">HuggingFace Embeddings</span>
+          <span class="skill-pill">Pandas / NumPy</span>
+          <span class="skill-pill">scikit-learn</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Programming Languages</h3>
+        <div class="skill-list">
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">PHP</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">C#</span>
+          <span class="skill-pill">C++</span>
+          <span class="skill-pill">Java</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Frameworks &amp; Tools</h3>
+        <div class="skill-list">
+          <span class="skill-pill">LangChain</span>
+          <span class="skill-pill">FastAPI</span>
+          <span class="skill-pill">Flutter</span>
+          <span class="skill-pill">Unity</span>
+          <span class="skill-pill">Genesys Cloud (IVR)</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Web Technologies</h3>
+        <div class="skill-list">
+          <span class="skill-pill">HTML</span>
+          <span class="skill-pill">CSS</span>
+          <span class="skill-pill">JavaScript</span>
+          <span class="skill-pill">SQL</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Networking &amp; Security</h3>
+        <div class="skill-list">
+          <span class="skill-pill">CCNA</span>
+          <span class="skill-pill">Network Security</span>
+          <span class="skill-pill">Defensive Security Practices</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="skill-list">
+          <span class="skill-pill">Arabic — Native</span>
+          <span class="skill-pill">English — Proficient</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section-shell">
+    <div class="waypoint"></div>
+    <div class="kicker">EVIDENCE — PRACTICAL EXPOSURE</div>
+    <div class="sec-head">
+      <h2>Experience</h2>
+      <p class="lede">Internships and roles relevant to AI/ML.</p>
+    </div>
+
+    <div class="xp-item">
+      <div class="xp-top">
+        <div>
+          <div class="xp-role">Cybersecurity Trainee</div>
+          <div class="xp-org">AIS — Advanced Integrated Systems, Cairo</div>
+        </div>
+        <div class="xp-dates">JUL 2025 — SEP 2025</div>
+      </div>
+      <p class="xp-desc">Completed a 3-month training program in the Cybersecurity department — hands-on exposure to defensive security operations, secure system practices, and applying network security fundamentals in real-world scenarios.</p>
+    </div>
+
+    <div class="xp-item">
+      <div class="xp-top">
+        <div>
+          <div class="xp-role">App Developer Intern</div>
+          <div class="xp-org">IST Networks, Cairo</div>
+        </div>
+        <div class="xp-dates">AUG 2024 — SEP 2024</div>
+      </div>
+      <p class="xp-desc">Designed and deployed IVR systems using Genesys Cloud, improving call routing efficiency. Developed app features within an agile team, contributing to reduced average call wait times and improved system reliability.</p>
+    </div>
+
+    <div class="xp-item">
+      <div class="xp-top">
+        <div>
+          <div class="xp-role">Machine Learning Trainee</div>
+          <div class="xp-org">IT Gate Academy, Cairo</div>
+        </div>
+        <div class="xp-dates">JUL 2024 — AUG 2024</div>
+      </div>
+      <p class="xp-desc">Completed practical projects applying supervised and unsupervised ML algorithms in Python, working with data preprocessing, model evaluation, and core libraries (NumPy, Pandas, scikit-learn).</p>
+    </div>
+
+    <div class="xp-item">
+      <div class="xp-top">
+        <div>
+          <div class="xp-role">Networking Trainee (CCNA)</div>
+          <div class="xp-org">IT Gate Academy, Cairo</div>
+        </div>
+        <div class="xp-dates">JUL 2023 — AUG 2023</div>
+      </div>
+      <p class="xp-desc">Hands-on training in computer networking — routing, switching, and troubleshooting — building a strong foundation aligned with Cisco CCNA standards.</p>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section-shell">
+    <div class="waypoint"></div>
+    <div class="kicker">EVIDENCE — PROJECTS</div>
+    <div class="sec-head">
+      <h2>Projects</h2>
+      <p class="lede">Practical AI/ML work, each with the problem, the approach, and the stack.</p>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-top">
+        <div>
+          <div class="proj-name">Dalil (دليل) — AI-Powered University Assistant</div>
+          <div class="proj-role">Team Leader · Graduation Project · Grade: A</div>
+        </div>
+        <span class="proj-tag">Featured · RAG</span>
+      </div>
+      <p class="proj-desc">Led a team to design and build a Retrieval-Augmented Generation assistant giving students, professors, and staff instant, accurate answers to university-related queries — grounded directly in real institutional data.</p>
+      <ul class="proj-list">
+        <li>Built the RAG pipeline using HuggingFace BGE-large-en-v1.5 embeddings, a FAISS vector store, Groq-hosted LLaMA 3.1, and LangChain's <code>create_retrieval_chain</code>, ensuring answers are grounded in real data rather than guesswork.</li>
+        <li>Developed a FastAPI backend (<code>/ask</code> and <code>/admin/command</code> endpoints) with role-based access control separating student queries from admin operations.</li>
+        <li>Designed a natural language admin command parser that outputs structured JSON, letting staff update or delete records without database knowledge — live updates, no server restart required.</li>
+        <li>Delivered bilingual (Arabic/English) support with consistent response quality, accessible via both a web app and a Flutter mobile app.</li>
+      </ul>
+      <div class="proj-stack">
+        <span class="stack-chip">Python</span>
+        <span class="stack-chip">LangChain</span>
+        <span class="stack-chip">FAISS</span>
+        <span class="stack-chip">HuggingFace</span>
+        <span class="stack-chip">Groq · LLaMA 3.1</span>
+        <span class="stack-chip">FastAPI</span>
+        <span class="stack-chip">Flutter</span>
+      </div>
+      <div class="proj-links">
+        <a href="https://github.com/habibaziedan" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+
+    <span class="placeholder-note">Only Dalil is documented in your CV right now — add more project cards here as you build and ship additional work.</span>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section-shell">
+    <div class="waypoint"></div>
+    <div class="kicker">END — GET IN TOUCH</div>
+    <div class="sec-head">
+      <h2>Contact</h2>
+      <p class="lede">Cairo, Egypt — reach out directly, or find me on GitHub and LinkedIn.</p>
+    </div>
+    <div class="contact-grid">
+      <a class="contact-card" href="mailto:habibaziedan649@gmail.com">
+        <span class="contact-label">EMAIL</span>
+        <span class="contact-value">habibaziedan649@gmail.com</span>
+      </a>
+      <a class="contact-card" href="tel:01110114334">
+        <span class="contact-label">PHONE</span>
+        <span class="contact-value">01110114334</span>
+      </a>
+      <a class="contact-card" href="https://www.linkedin.com/in/habiba-ziedan-2145a72b5" target="_blank" rel="noopener">
+        <span class="contact-label">LINKEDIN</span>
+        <span class="contact-value">in/habiba-ziedan-2145a72b5</span>
+      </a>
+      <a class="contact-card" href="https://github.com/habibaziedan" target="_blank" rel="noopener">
+        <span class="contact-label">GITHUB</span>
+        <span class="contact-value">github.com/habibaziedan</span>
+      </a>
+      <a class="contact-card" href="#" target="_blank" rel="noopener">
+        <span class="contact-label">CV</span>
+        <span class="contact-value">Download PDF ↗</span>
+      </a>
+    </div>
+    <span class="placeholder-note">CV download link still points nowhere — host your CV PDF somewhere (e.g. GitHub or Google Drive) and drop the link in.</span>
+  </section>
+
+  <footer>
+    <span>© 2026 Habiba Ziedan</span>
+    <span class="mono">Identity → Evidence → Skills/Experience → CV → Contact</span>
+  </footer>
+</div>
+
+<script>
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  themeToggle.addEventListener('click', () => {
+    const current = root.getAttribute('data-theme');
+    if (current === 'dark') {
+      root.setAttribute('data-theme', 'light');
+    } else if (current === 'light') {
+      root.removeAttribute('data-theme');
+    } else {
+      root.setAttribute('data-theme', 'dark');
+    }
+  });
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navA = document.querySelectorAll('nav.links a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navA.forEach(a => a.classList.remove('active'));
+        const match = document.querySelector(`nav.links a[href="#${entry.target.id}"]`);
+        if (match) match.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+
+</body>
+</html>
