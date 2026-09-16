@@ -2,7 +2,7 @@
 
 Personal portfolio website representing my professional digital identity as an AI, Machine Learning, and Cybersecurity graduate.
 
-**Live site:** _add your deployed link here once published (see steps below)_
+**Live site:** [habibaziedan.github.io/AIportfolio](https://habibaziedan.github.io/AIportfolio/)
 
 ## About
 
